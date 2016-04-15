@@ -1,6 +1,14 @@
 # Hurray
 ActiveRecord extension for working with database arrays fields.
 
+Installation
+--
+Add following line to Gemfile
+
+``` ruby
+gem 'hurray'
+```
+
 ordered_with
 --
 Get records ordered according to the ids order.<br />
