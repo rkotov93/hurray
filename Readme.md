@@ -1,5 +1,5 @@
 # Hurray
-Gem extension for ActiveRecord for working with database arrays fields.
+ActiveRecord extension for working with database arrays fields.
 
 ordered_with
 --
