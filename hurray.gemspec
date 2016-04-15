@@ -8,5 +8,5 @@ Gem::Specification.new do |s|
   s.email       = 'rkotov93@gmail.com'
   s.files       = ["lib/hurray.rb"]
   s.homepage    = 'https://github.com/rkotov93/hurray'
-  s.license       = 'MIT'
+  s.license     = 'MIT'
 end
