@@ -1,10 +1,10 @@
 # Hurray
----
+
 Gem extension for ActiveRecord for working with database arrays fields.
 
----
+
 #### ordered_with
----
+
 Get records ordered according to the ids order.<br />
 
 ``` ruby
