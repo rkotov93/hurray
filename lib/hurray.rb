@@ -15,11 +15,12 @@ module Hurray
     #   hash: (Hash)
 
     def ordered_with(hash)
-      params = parse_ordered_with_params(hash)
+      params = []
+      parse_ordered_with_params(hash, params)
 
       order_clause = ''
       params.each_with_index do |param, index|
-        order_clause << ' , ' if index != 0
+        order_clause << ', ' if index != 0
         order_clause << "CASE #{param[:table]}.#{param[:column]} "
         array = param[:array]
         array.each_with_index do |el, pos|
@@ -33,18 +34,15 @@ module Hurray
 
     private
 
-    def parse_ordered_with_params(table = table_name, hash)
-      results = []
+    def parse_ordered_with_params(table = table_name, hash, params)
       hash.each do |k, v|
         if v.is_a? Hash
-          parse_ordered_with_params(k.to_s, v)
+          parse_ordered_with_params(k.to_s, v, params)
         else
-          results << { table: table, column: k.to_s, array: v }
+          params << { table: table, column: k.to_s, array: v }
         end
       end
-      results
     end
-
   end
 end
 
