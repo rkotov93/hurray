@@ -6,36 +6,45 @@ module Hurray
     # Get records ordered according to the specified with array column order
     #
     # Examples:
-    #   >> User.ordered_with(:id, [4,2,6])
+    #   >> User.ordered_with(id: [4,2,6])
     #   => User::ActiveRecord_Relation [#<User id: 4 ...>, #<User id: 2 ...>, #<User id: 6 ...>, #<User id: 1 ...>, ...]
     #
-    #   >> User.ordered_with(:id, [4,2,6], provided_only: true)
-    #   => User::ActiveRecord_Relation [#<User id: 4 ...>, #<User id: 2 ...>, #<User id: 6 ...>]
-    #
-    #   >> User.ordered_with(:name, %w(Nick Malvin John), provided_only: true)
-    #   => User::ActiveRecord_Relation [#<User name: Nick ...>, #<User name: Malvin ...>, #<User name: John ...>]
+    #   >> User.joins(:friends).ordered_with(friends: { id: [4, 2, 6] })
     #
     # Arguments:
-    #   column:  (Key or String) # DB column
-    #   array:   (Array)         # Custom order
-    #   options: (Hash)
-    #     povided:   (Boolean)       # Get records satisfying array values
-    #     direction: (Key or String) # :asc or :desc
+    #   hash: (Hash)
 
-    def ordered_with(column, array, options = {})
-      direction = options[:direction].to_s.upcase
-      direction = %w(ASC DESC).include?(direction) ? direction : 'ASC'
-      provided_only = options[:provided_only].nil? ? false : options[:provided_only]
+    def ordered_with(hash)
+      params = parse_ordered_with_params(hash)
 
-      order_clause = "CASE #{column} "
-      array.each_with_index do |el, index|
-        order_clause << sanitize_sql_array(['WHEN ? THEN ? ', el, index])
+      order_clause = ''
+      params.each_with_index do |param, index|
+        order_clause << ' , ' if index != 0
+        order_clause << "CASE #{param[:table]}.#{param[:column]} "
+        array = param[:array]
+        array.each_with_index do |el, pos|
+          order_clause << sanitize_sql_array(['WHEN ? THEN ? ', el, pos])
+        end
+        order_clause << sanitize_sql_array(['ELSE ? END', array.length])
       end
-      order_clause << sanitize_sql_array(['ELSE ? END ', array.length]) << direction
 
-      return where(column => array).order(order_clause) if provided_only
       order(order_clause)
     end
+
+    private
+
+    def parse_ordered_with_params(table = table_name, hash)
+      results = []
+      hash.each do |k, v|
+        if v.is_a? Hash
+          parse_ordered_with_params(k.to_s, v)
+        else
+          results << { table: table, column: k.to_s, array: v }
+        end
+      end
+      results
+    end
+
   end
 end
 
