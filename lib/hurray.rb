@@ -39,7 +39,7 @@ module Hurray
         if v.is_a? Hash
           parse_ordered_with_params(k.to_s, v, params)
         else
-          params << { table: table, column: k.to_s, array: v }
+          params << { table: table, column: k.to_s, array: v } unless v.empty? || v.nil?
         end
       end
     end
