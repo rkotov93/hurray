@@ -1,5 +1,5 @@
 # Hurray
-ActiveRecord extension for working with database arrays fields.
+Order ActiveRecord collections specified way.
 
 Installation
 --
