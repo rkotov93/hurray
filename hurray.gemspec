@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'hurray'
-  s.version     = '0.1.3'
+  s.version     = '0.1.4'
   s.date        = '2016-04-23'
   s.summary     = "Hurray!"
   s.description = "Simple ActiveRecord extension for working with database arrays fields"

@@ -29,7 +29,7 @@ module Hurray
         order_clause << sanitize_sql_array(['ELSE ? END', array.length])
       end
 
-      order(order_clause)
+      order(Arel.sql(order_clause))
     end
 
     private
